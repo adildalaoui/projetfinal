@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestion des Produits</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            color: #333;
+        }
+        .container {
+            width: 80%;
+            margin: auto;
+            overflow: hidden;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+        }
+        h1 {
+            color: #007bff;
+            text-align: center;
+        }
+        form {
+            margin-bottom: 20px;
+        }
+        input[type="text"], input[type="number"] {
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        input[type="submit"] {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        input[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+        .product-list {
+            margin-top: 20px;
+        }
+        .product-list ul {
+            list-style: none;
+            padding: 0;
+        }
+        .product-list li {
+            background-color: #e9ecef;
+            padding: 10px;
+            border-radius: 4px;
+            margin-bottom: 10px;
+        }
+        .product-list li:nth-child(odd) {
+            background-color: #f8f9fa;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Gestion des Produits</h1>
+        
+        <form id="product-form">
+            <input type="text" id="name" placeholder="Nom du produit" required>
+            <input type="number" id="quantity" placeholder="Quantité" required>
+            <input type="submit" value="Ajouter un produit">
+        </form>
+
+        <div class="product-list">
+            <h2>Liste des Produits</h2>
+            <ul id="product-list">
+                <!-- Les produits seront ajoutés ici dynamiquement -->
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        // Fonction pour ajouter un produit via l'API
+        document.getElementById('product-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+            
+            const name = document.getElementById('name').value;
+            const quantity = document.getElementById('quantity').value;
+            
+            fetch('/api/products', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ name, quantity })
+            })
+            .then(response => response.json())
+            .then(data => {
+                alert('Produit ajouté avec succès!');
+                document.getElementById('name').value = '';
+                document.getElementById('quantity').value = '';
+                loadProducts(); // Recharger la liste des produits
+            })
+            .catch(error => console.error('Erreur:', error));
+        });
+
+        // Fonction pour charger les produits depuis l'API
+        function loadProducts() {
+            fetch('/api/products')
+                .then(response => response.json())
+                .then(products => {
+                    const productList = document.getElementById('product-list');
+                    productList.innerHTML = '';
+                    products.forEach(product => {
+                        const li = document.createElement('li');
+                        li.textContent = `Nom: ${product.name}, Quantité: ${product.quantity}`;
+                        productList.appendChild(li);
+                    });
+                })
+                .catch(error => console.error('Erreur:', error));
+        }
+
+        // Charger les produits au chargement de la page
+        window.onload = loadProducts;
+    </script>
+</body>
+</html>
