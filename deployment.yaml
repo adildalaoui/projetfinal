@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: python-webapp-deployment
+spec:
+  replicas: 2 # Cr\u00e9e deux r\u00e9pliques (pods)
+  selector:
+    matchLabels:
+      app: python-webapp
+  template:
+    metadata:
+      labels:
+        app: python-webapp
+    spec:
+      containers:
+      - name: python-webapp
+        image: adildal/python-webapp:latest # Votre image Docker
+        ports:
+        - containerPort: 5000 # Le port sur lequel votre application \u00e9coute
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: python-webapp-service
+spec:
+  selector:
+    app: python-webapp
+  ports:
+    - protocol: TCP
+      port: 80 # Expose le service sur le port 80
+      targetPort: 5000 # Redirige vers le port 5000 des pods
+  type: NodePort # Expose le service sur une IP externe via un NodePort
