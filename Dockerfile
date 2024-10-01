@@ -1,5 +1,5 @@
 # Utiliser Python 3.9 basé sur Debian (ou Slim pour une image plus légère)
-FROM python:3.9-slim
+FROM --platform=linux/amd64 python:3.9-slim-buster as build
 
 # Mettre à jour les paquets et installer les dépendances nécessaires
 RUN apt-get update && apt-get install -y --no-install-recommends \
@@ -32,4 +32,4 @@ COPY . /app
 RUN pip install pytest
 
 # Démarrer l'application
-CMD ["python3", "app.py"]
+CMD ["python", "app.py"]
