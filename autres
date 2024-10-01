@@ -1,0 +1,50 @@
+# Utiliser Ubuntu 22.04 comme base
+FROM ubuntu:22.04
+
+# Mettre à jour les paquets et installer les dépendances nécessaires
+RUN apt-get update && apt-get install -y \
+    wget \
+    build-essential \
+    libssl-dev \
+    zlib1g-dev \
+    libbz2-dev \
+    libreadline-dev \
+    libsqlite3-dev \
+    curl \
+    libffi-dev \
+    && apt-get clean
+
+# Installer Python 3.9 manuellement
+RUN wget https://www.python.org/ftp/python/3.9.20/Python-3.9.20.tgz && \
+    tar xzf Python-3.9.20.tgz && \
+    cd Python-3.9.20 && \
+    ./configure --enable-optimizations && \
+    make altinstall && \
+    rm /Python-3.9.20.tgz
+
+# Installer pip pour Python 3.9
+RUN wget https://bootstrap.pypa.io/get-pip.py && \
+    python3.9 get-pip.py && \
+    rm get-pip.py
+
+# Créer un lien symbolique pour que 'python' pointe vers 'python3.9'
+RUN ln -s /usr/local/bin/python3.9 /usr/bin/python
+
+# Définir le répertoire de travail
+WORKDIR /app
+
+# Copier votre fichier requirements.txt dans l'image
+COPY requirements.txt /app/requirements.txt
+
+# Installer les dépendances Python à partir du requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Copier le code de votre application dans le conteneur
+COPY . /app
+
+# Installer pytest
+RUN pip install pytest
+
+
+# Démarrer l'application
+CMD ["python", "app.py"]
