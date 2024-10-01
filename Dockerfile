@@ -32,4 +32,4 @@ COPY . /app
 RUN pip install pytest
 
 # Démarrer l'application
-CMD ["python", "app.py"]
+CMD ["python3", "app.py"]
