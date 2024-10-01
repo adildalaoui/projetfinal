@@ -19,6 +19,9 @@ WORKDIR /app
 # Copier votre fichier requirements.txt dans l'image
 COPY requirements.txt /app/requirements.txt
 
+# Créer un lien symbolique pour que 'python' pointe vers 'python3.9'
+RUN ln -s /usr/local/bin/python3.9 /usr/bin/python
+
 # Installer les dépendances Python à partir du requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt
 
