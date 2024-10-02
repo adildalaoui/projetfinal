@@ -1,5 +1,5 @@
 # Utiliser Python 3.9 basé sur Debian (ou Slim pour une image plus légère)
-FROM --platform=linux/amd64 python:3.9-slim-buster as build
+FROM python:3.9-slim
 
 # Mettre à jour les paquets et installer les dépendances nécessaires
 RUN apt-get update && apt-get install -y --no-install-recommends \
