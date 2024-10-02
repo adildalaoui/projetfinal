@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: python-webapp-deployment
 spec:
-  replicas: 2 # Cr\u00e9e deux r\u00e9pliques (pods)
+  replicas: 2 
   selector:
     matchLabels:
       app: python-webapp
@@ -14,9 +14,9 @@ spec:
     spec:
       containers:
       - name: python-webapp
-        image: adildal/python-web-flask:latest # Votre image Docker
+        image: adildal/python-webapp:latest # Votre image Docker
         ports:
-        - containerPort: 5000 # Le port sur lequel votre application \u00e9coute
+        - containerPort: 5000 # Le port sur lequel votre application ecoute
 ---
 apiVersion: v1
 kind: Service
