@@ -29,4 +29,5 @@ spec:
     - protocol: TCP
       port: 80 # Expose le service sur le port 80
       targetPort: 5000 # Redirige vers le port 5000 des pods
+      nodePort: 30007
   type: NodePort # Expose le service sur une IP externe via un NodePort
